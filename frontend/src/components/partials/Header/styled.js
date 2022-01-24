@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const HeaderArea = styled.div`
 
 background-color: #FFF;
-border-bottom: solid 1px;
+border-bottom: solid 1px #999;
 padding-bottom: 1rem;
 
 .container {
@@ -48,7 +48,11 @@ nav {
     li {
         margin: 0 20px;   
 
-    a {
+    a, button {
+        border:0;
+        background:none;
+        cursor:point;
+        outline:0;
         color:#000;
         font-size:14px;
         text-decoration:none;
