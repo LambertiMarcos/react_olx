@@ -33,6 +33,30 @@ const apiFetchPost = async(endpoint, body) => {
     return json;
 }
 
+const apiFetchFile = async (endpoint,body)=>{
+    // verificar se o token foi enviado na requisição
+    if (!body.token) {
+        let token = Cookies.get('token');
+        if (token) {
+            body.append('token', token);
+        }
+    }
+    // endpoint + body
+    const res = await fetch(BASEAPI + endpoint, {
+        method: 'POST',
+        body // objeto enviado
+    });
+    const json = await res.json();//resposta sempre em json
+
+    // Quando o usuário não tem autorização
+    if (json.notallowed) {
+        window.location.href = '/signin';// envia para tele de login
+        return;
+    }
+
+    return json;
+}
+
 //REQUISIÇÃO GET
 const apiFetchGet = async (endpoint, body = []) => {
     // verificar se o token foi enviado na requisição
@@ -99,7 +123,16 @@ const olxAPI = {
         {id, other}
     );
     return json;
-    }
+    },
+
+    addAd: async (fData) =>{
+        const json = await apiFetchFile(
+            '/ad/add',
+            fData
+        );
+    return json;
+    },
+
 };
 
 
