@@ -41,9 +41,6 @@ form {
                     color:#333;
                 }
             }
-            checkbox {
-                width:10%;
-            }
 
             textarea  {
                 height:150px;

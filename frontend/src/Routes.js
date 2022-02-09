@@ -10,6 +10,7 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import AdPage from './pages/AdPage';
 import AddAd from './pages/AddAd';
+import Ads from './pages/Ads';
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default ( ) => {
@@ -20,6 +21,7 @@ export default ( ) => {
             <Route exact path="/signin" element={<SignIn />} />
             <Route exact path="/signup" element={<SignUp />} />
             <Route exact path="/ad/:id" element={<AdPage />} />
+            <Route exact path="/ads" element={<Ads />} />
             <Route exact path="/post-an-ad" element={<RequireAuth private> <AddAd /> </RequireAuth>} />
             <Route exact path="*" element={<NotFound />} />
         </Routes>

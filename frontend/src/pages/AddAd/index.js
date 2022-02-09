@@ -143,7 +143,7 @@ const Page = () => {
 
                     <label className="area">
                         <div className="area--title">Preço Negociável</div>
-                        <div className="area--input">
+                        <div className="">
                             <input 
                                 type="checkbox" 
                                 disabled={disabled}
