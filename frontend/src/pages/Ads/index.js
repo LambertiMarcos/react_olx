@@ -29,26 +29,41 @@ const Page = () => {
     const [stateListLoc, setStateListLoc] = useState([]);
     const [ categories, setCategories] = useState([]);
     const [ adList, setAdList] = useState([]);
-    
+    const [adsTotal, setAdsTotal] = useState(0);
+    const [pageCount, setPageCount] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+
     const [resultOpacity, setResultOpacity] = useState(1);
     const [loading, setLoading] = useState(true);
 
     // Função para criar a requisição
     const getAdsList = async () => {
+
         setLoading(true);
+
+        let offset = (currentPage-1) * 12 ;
+
         const json = await api.getAds({
             sort: 'desc',
-            limit: 9,
+            limit: 12,
             q,
             cat,
-            state
+            state,
+            offset
         });
         setAdList(json.ads);
+        setAdsTotal(json.total);
         setResultOpacity(1);
         setLoading(false);
     }
 
-
+    useEffect(()=>{
+        if(adList.length > 0 ){
+            setPageCount(Math.ceil( adsTotal / adList.length ));// math.ceil arredonda para cima
+        } else {
+            setPageCount(0);
+        }
+    },[adsTotal]);
 
     // monitora a mudança da url de Ads
     useEffect(() => {
@@ -69,6 +84,7 @@ const Page = () => {
         }
         timer = setTimeout(getAdsList, 1500);
         setResultOpacity(0.3);
+        setCurrentPage(1);
     },[q, cat, state]);
 
 
@@ -100,6 +116,17 @@ const Page = () => {
         getRecentAds();
     }, []);
 */
+    // useEffect de paginação
+    useEffect(()=>{
+        setResultOpacity(0.3);
+        getAdsList();
+    }, [currentPage]);
+
+    // Criação da paginação
+    let pagination = [];
+    for(let i=1; i<=pageCount;i++) {
+        pagination.push(i);
+    }
 
     return (
         <PageContainer>
@@ -137,7 +164,7 @@ const Page = () => {
                 <div className="right-side">
                     <h2>Resultado da pesquisa:</h2>
 
-                    {loading &&             
+                    {loading && adList.length ===0 &&            
                     <div className="listWarning">Carregando..</div>
                     }
                     {!loading && adList.length ===0 &&
@@ -148,6 +175,12 @@ const Page = () => {
                         <AdItem key={k} data={i} />  
                         )}
                     </div>
+                    <div className="pagination">
+                        {pagination.map((i,k)=>
+                            <div key={k}  onClick={()=>setCurrentPage(i)} className={i===currentPage?'pagItem active': 'pagItem'}>{i}</div> 
+                        )}
+                    </div>
+
                 </div>
             </PageArea>
         </PageContainer>
